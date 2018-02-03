@@ -26,3 +26,10 @@ To run docker-backup itself as a Container, you need to bind-mount the Docker so
 
     $ docker run -v /var/run/docker.sock:/docker.sock \
          -v /var/lib/docker/vfs/dir:/var/lib/docker/vfs/dir dckr/docker-backup -addr /docker.sock ...
+
+## Build
+```
+go get -u github.com/golang/dep/cmd/dep
+dep ensure
+go build
+```
