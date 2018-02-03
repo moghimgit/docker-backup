@@ -1,14 +1,14 @@
-FROM       alpine
-MAINTAINER Johannes 'fish' Ziemke <fish@docker.com> (@discordianfish)
+FROM       golang:1.9
+MAINTAINER Johannes 'fish' Ziemke <github@5pi.de> (@discordianfish)
 
-ENV  GOPATH /go
-ENV APPPATH $GOPATH/src/github.com/docker-infra/docker-backup
-COPY . $APPPATH
-RUN apk add --update -t build-deps go git && cd $APPPATH \
-    && go get -d && go build -o /bin/docker-backup \
-    && mkdir /docker-backup \
-    && ln -s /bin/docker-backup /docker-backup/docker-backup \
-    && apk del --purge build-deps && rm -rf $GOPATH
+RUN go get -u github.com/golang/dep/cmd/dep
 
-WORKDIR    /docker-backup
+WORKDIR	/go/src/github.com/discordianfish/docker-backup
+COPY Gopkg.* *.go ./
+RUN	dep ensure --vendor-only
+COPY . .
+RUN go install
+
+FROM	busybox
+COPY	--from=0 /go/bin/docker-backup /bin/
 ENTRYPOINT [ "/bin/docker-backup" ]

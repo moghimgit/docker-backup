@@ -17,12 +17,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/docker/docker/runconfig"
+	"github.com/fsouza/go-dockerclient"
 )
 
 type container struct {
-	Config     runconfig.Config
-	HostConfig runconfig.HostConfig
+	Config     docker.Config
+	HostConfig docker.HostConfig
 	Name       string            `json:"Name"`
 	Volumes    map[string]string `json:"Volumes"`
 }
